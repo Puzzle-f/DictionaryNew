@@ -14,12 +14,19 @@ import com.example.dictionarynew.view.BaseActivity
 import com.example.dictionarynew.view.MainAdapter
 import com.example.dictionarynew.view.SearchDialogFragment
 import com.example.dictionarynew.viewmodel.MainViewModel
+import dagger.android.AndroidInjection
+import javax.inject.Inject
 
 class MainActivity : BaseActivity<AppState, MainInteractor>() {
 
-    override val model: MainViewModel by lazy {
-        ViewModelProvider.NewInstanceFactory().create(MainViewModel::class.java)
-    }
+    @Inject
+    internal lateinit var viewModelFactory: ViewModelProvider.Factory
+
+//    override val model: MainViewModel by lazy {
+//        ViewModelProvider.NewInstanceFactory().create(MainViewModel::class.java)
+//    }
+    override lateinit var model: MainViewModel
+
     private val observer = Observer<AppState> { renderData(it) }
 
     private var adapter: MainAdapter? = null // Адаптер для отображения списка
@@ -37,9 +44,14 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         _vb = ActivityMainBinding.inflate(layoutInflater)
         setContentView(vb.root)
+
+        model = viewModelFactory.create(MainViewModel::class.java)
+//        model.subscribe().observe(this@MainActivity, Observer<AppState> { renderData(it) })
+
         vb.searchFab.setOnClickListener {
             val searchDialogFragment = SearchDialogFragment.newInstance()
             searchDialogFragment.setOnSearchClickListener(object :
@@ -50,6 +62,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
             })
             searchDialogFragment.show(supportFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
         }
+
 //        subscribeToViewModel()
     }
 

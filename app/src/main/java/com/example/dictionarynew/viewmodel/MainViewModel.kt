@@ -7,13 +7,10 @@ import com.example.dictionarynew.datasource.DataSourceRemote
 import com.example.dictionarynew.interactor.MainInteractor
 import com.example.dictionarynew.repositiry.RepositoryImplementation
 import io.reactivex.observers.DisposableObserver
+import javax.inject.Inject
 
-class MainViewModel(
-    private val interactor: MainInteractor = MainInteractor(
-        RepositoryImplementation(DataSourceRemote()),
-        RepositoryImplementation(DataSourceLocal())
-    )
-) : BaseViewModel<AppState>() {
+class MainViewModel @Inject constructor(
+    private val interactor: MainInteractor) : BaseViewModel<AppState>() {
     // В этой переменной хранится последнее состояние Activity
     private var appState: AppState? = null
 
