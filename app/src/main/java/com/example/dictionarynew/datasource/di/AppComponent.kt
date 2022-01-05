@@ -9,7 +9,7 @@ import javax.inject.Singleton
 
 // Тут мы прописываем все наши модули, включая AndroidSupportInjectionModule.
 // Этот класс создаётся Dagger’ом. Он как раз связан с аннотацией ContributesAndroidInjector выше и позволяет внедрять в Activity все
-// необходимые зависимости
+// необходимые зависимости ,kf ,kf
 @Component(
     modules = [
         InteractorModule::class,
