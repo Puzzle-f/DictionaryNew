@@ -14,12 +14,12 @@ import com.example.dictionarynew.view.BaseActivity
 import com.example.dictionarynew.view.MainAdapter
 import com.example.dictionarynew.view.SearchDialogFragment
 import com.example.dictionarynew.viewmodel.MainViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity<AppState, MainInteractor>() {
 
-    override val model: MainViewModel by lazy {
-        ViewModelProvider.NewInstanceFactory().create(MainViewModel::class.java)
-    }
+    override val model: MainViewModel by viewModel()
+
     private val observer = Observer<AppState> { renderData(it) }
 
     private var adapter: MainAdapter? = null // Адаптер для отображения списка
