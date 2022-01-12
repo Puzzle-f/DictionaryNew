@@ -9,11 +9,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.dictionarynew.R
+import com.example.dictionarynew.databinding.SearchDialogFragmentBinding
+import com.example.dictionarynew.getEmptyString
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputEditText
-import kotlinx.android.synthetic.main.search_dialog_fragment.*
 
 class SearchDialogFragment : BottomSheetDialogFragment() {
+
+    private var vb: SearchDialogFragmentBinding? = null
 
     private lateinit var searchEditText: TextInputEditText
     private lateinit var clearTextImageView: ImageView
@@ -47,15 +50,20 @@ class SearchDialogFragment : BottomSheetDialogFragment() {
         onSearchClickListener = listener
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.search_dialog_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        searchEditText = search_edit_text
-        clearTextImageView = clear_text_imageview
-        searchButton = search_button_textview
+        vb = SearchDialogFragmentBinding.bind(view)
+        searchEditText = vb!!.searchEditText
+        clearTextImageView = vb!!.clearTextImageview
+        searchButton = vb!!.searchButtonTextview
 
         searchButton.setOnClickListener(onSearchButtonClickListener)
         searchEditText.addTextChangedListener(textWatcher)
@@ -69,7 +77,7 @@ class SearchDialogFragment : BottomSheetDialogFragment() {
 
     private fun addOnClearClickListener() {
         clearTextImageView.setOnClickListener {
-//            searchEditText.setText(String.getEmptyString())
+            searchEditText.setText(String.getEmptyString())
             searchButton.isEnabled = false
         }
     }

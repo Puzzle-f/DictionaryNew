@@ -27,6 +27,6 @@ val application = module {
 // Функция factory сообщает Koin, что эту зависимость нужно создавать каждый
 // раз заново, что как раз подходит для Activity и её компонентов.
 val mainScreen = module {
-    factory { MainInteractor(remoteRepository = get(named(NAME_REMOTE)),localRepository = get(named(NAME_LOCAL))) }
-    factory { MainViewModel(interactor = get()) }
+    factory { MainInteractor(get(named(NAME_REMOTE)), get(named(NAME_LOCAL))) }
+    factory { MainViewModel(get()) }
 }

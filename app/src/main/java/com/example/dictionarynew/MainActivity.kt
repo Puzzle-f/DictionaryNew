@@ -1,6 +1,8 @@
 package com.example.dictionarynew
 
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
@@ -10,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dictionarynew.databinding.ActivityMainBinding
 import com.example.dictionarynew.interactor.MainInteractor
 import com.example.dictionarynew.model.DataModel
+import com.example.dictionarynew.utils.network.isOnline
 import com.example.dictionarynew.view.BaseActivity
 import com.example.dictionarynew.view.MainAdapter
 import com.example.dictionarynew.view.SearchDialogFragment
@@ -18,11 +21,17 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity<AppState, MainInteractor>() {
 
-    override val model: MainViewModel by viewModel()
+    override lateinit var model: MainViewModel
 
-    private val observer = Observer<AppState> { renderData(it) }
+    private val adapter: MainAdapter by lazy { MainAdapter(onListItemClickListener) } // Адаптер для отображения списка
+    private val fabClickListener: View.OnClickListener =
+        View.OnClickListener {
+            Log.d("","Жмакаем кнопку search_fab")
+            val searchDialogFragment = SearchDialogFragment.newInstance()
+            searchDialogFragment.setOnSearchClickListener(onSearchClickListener)
+            searchDialogFragment.show(supportFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
 
-    private var adapter: MainAdapter? = null // Адаптер для отображения списка
+        }
 
     private var _vb: ActivityMainBinding? = null
     private val vb: ActivityMainBinding get() = _vb!!
@@ -38,20 +47,46 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//        setContentView(R.layout.activity_main)
         _vb = ActivityMainBinding.inflate(layoutInflater)
         setContentView(vb.root)
+        iniViewModel()
+        initViews()
+    }
+
+    private fun iniViewModel() {
+        if (vb.mainActivityRecyclerview.adapter != null) {
+            throw IllegalStateException("The ViewModel should be initialised first")
+        }
+        val viewModel: MainViewModel by viewModel()
+        model = viewModel
+        model.subscribe().observe(this@MainActivity, Observer<AppState> { renderData(it) })
+    }
+
+    private fun initViews() {
         vb.searchFab.setOnClickListener {
+            Log.d("", "жмакаем searchFab")
             val searchDialogFragment = SearchDialogFragment.newInstance()
-            searchDialogFragment.setOnSearchClickListener(object :
-                SearchDialogFragment.OnSearchClickListener {
-                override fun onClick(searchWord: String) {
-                    model.getData(searchWord, true).observe(this@MainActivity, observer)
-                }
-            })
+            searchDialogFragment.setOnSearchClickListener(onSearchClickListener)
             searchDialogFragment.show(supportFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
         }
-//        subscribeToViewModel()
+        vb.mainActivityRecyclerview.layoutManager = LinearLayoutManager(applicationContext)
+//        main_activity_recyclerview.layoutManager = LinearLayoutManager(applicationContext)
+        vb.mainActivityRecyclerview.adapter = adapter
+//        main_activity_recyclerview.adapter = adapter
     }
+
+    private val onSearchClickListener: SearchDialogFragment.OnSearchClickListener =
+        object : SearchDialogFragment.OnSearchClickListener {
+            override fun onClick(searchWord: String) {
+                isNetworkAvailable = isOnline(applicationContext)
+                if (isNetworkAvailable) {
+                    model.getData(searchWord, isNetworkAvailable)
+                } else {
+                    showNoInternetConnectionDialog()
+                }
+            }
+        }
 
 
 //    private fun subscribeToViewModel() {
@@ -63,40 +98,75 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
 
     // Переопределяем базовый метод
     override fun renderData(appState: AppState) {
-        // В зависимости от состояния модели данных (загрузка, отображение,
-        // ошибка) отображаем соответствующий экран
+//        // В зависимости от состояния модели данных (загрузка, отображение,
+//        // ошибка) отображаем соответствующий экран
+//        when (appState) {
+//            is AppState.Success -> {
+//                val dataModel = appState.data
+//                if (dataModel == null || dataModel.isEmpty()) {
+//                    showErrorScreen(getString(R.string.empty_server_response_on_success))
+//                } else {
+//                    showViewSuccess()
+//                    if (adapter == null) {
+//                        vb.mainActivityRecyclerview.layoutManager =
+//                            LinearLayoutManager(applicationContext)
+//                        vb.mainActivityRecyclerview.adapter =
+//                            MainAdapter(dataModel)
+//                    } else {
+//                        adapter!!.setData(dataModel)
+//                    }
+//                }
+//            }
+//            is AppState.Loading -> {
+//                showViewLoading()
+//                // Задел на будущее, если понадобится отображать прогресс
+//                // загрузки
+//                if (appState.progress != null) {
+//                    vb.progressBarHorizontal.visibility = VISIBLE
+//                    vb.progressBarRound.visibility = GONE
+//                    vb.progressBarHorizontal.progress = appState.progress
+//                } else {
+//                    vb.progressBarHorizontal.visibility = GONE
+//                    vb.progressBarRound.visibility = VISIBLE
+//                }
+//            }
+//            is AppState.Error -> {
+//                showErrorScreen(appState.error.message)
+//            }
+//        }
+
         when (appState) {
             is AppState.Success -> {
-                val dataModel = appState.data
-                if (dataModel == null || dataModel.isEmpty()) {
-                    showErrorScreen(getString(R.string.empty_server_response_on_success))
+                showViewWorking()
+                val data = appState.data
+                if (data.isNullOrEmpty()) {
+                    showAlertDialog(
+                        getString(R.string.dialog_title_sorry),
+                        getString(R.string.empty_server_response_on_success)
+                    )
                 } else {
-                    showViewSuccess()
-                    if (adapter == null) {
-                        vb.mainActivityRecyclerview.layoutManager =
-                            LinearLayoutManager(applicationContext)
-                        vb.mainActivityRecyclerview.adapter =
-                            MainAdapter(dataModel)
-                    } else {
-                        adapter!!.setData(dataModel)
-                    }
+                    adapter.setData(data)
                 }
             }
             is AppState.Loading -> {
                 showViewLoading()
-                // Задел на будущее, если понадобится отображать прогресс
-                // загрузки
                 if (appState.progress != null) {
                     vb.progressBarHorizontal.visibility = VISIBLE
                     vb.progressBarRound.visibility = GONE
-                    vb.progressBarHorizontal.progress = appState.progress
+                    vb.progressBarHorizontal.visibility = appState.progress
+//                    progress_bar_horizontal.visibility = VISIBLE
+//                    progress_bar_round.visibility = GONE
+//                    progress_bar_horizontal.progress = appState.progress
                 } else {
                     vb.progressBarHorizontal.visibility = GONE
                     vb.progressBarRound.visibility = VISIBLE
+//                    progress_bar_horizontal.visibility = GONE
+//                    progress_bar_round.visibility = VISIBLE
                 }
             }
             is AppState.Error -> {
-                showErrorScreen(appState.error.message)
+                showViewWorking()
+                showAlertDialog(getString(R.string.error_stub), appState.error.message)
             }
         }
     }
@@ -125,6 +195,10 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         vb.successLinearLayout.visibility = GONE
         vb.loadingFrameLayout.visibility = GONE
         vb.errorLinearLayout.visibility = VISIBLE
+    }
+
+    private fun showViewWorking() {
+        vb.loadingFrameLayout.visibility = GONE
     }
 
     companion object {

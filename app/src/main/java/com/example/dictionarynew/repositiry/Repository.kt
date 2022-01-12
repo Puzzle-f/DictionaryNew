@@ -5,5 +5,5 @@ import io.reactivex.Observable
 //  эти данные передаём интерактору
 interface Repository<T> {
 
-    fun getData(word: String): Observable<T>
+    suspend fun getData(word: String): T
 }

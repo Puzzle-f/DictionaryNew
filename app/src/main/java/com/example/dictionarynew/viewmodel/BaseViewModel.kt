@@ -1,23 +1,31 @@
 package com.example.dictionarynew.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.dictionarynew.AppState
-import com.example.dictionarynew.datasource.rx.SchedulerProvider
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.*
 
 abstract class BaseViewModel<T : AppState>(
-    protected val liveDataForViewToObserve: MutableLiveData<T> = MutableLiveData(),
-    protected val compositeDisposable: CompositeDisposable = CompositeDisposable(),
-    protected val schedulerProvider: SchedulerProvider = SchedulerProvider()
-) : ViewModel() { // Наследуемся от ViewModel
-    // Метод, благодаря которому Activity подписывается на изменение данных,
-    // возвращает LiveData, через которую и передаются данные
-    open fun getData(word: String, isOnline: Boolean): LiveData<T> = liveDataForViewToObserve
-    // Единственный метод класса ViewModel, который вызывается перед
-    // уничтожением Activity
+    protected open val _mutableLiveData: MutableLiveData<T> = MutableLiveData()
+) : ViewModel() {
+    protected val viewModelCoroutineScope = CoroutineScope(
+        Dispatchers.Main
+                + SupervisorJob() // чтобы все корутины не падали из-за ошибки в одной корутине
+//                + CoroutineExceptionHandler { _, throwable ->
+//            handleError(throwable)
+//        }
+        )
+
+    abstract fun getData(word: String, isOnline: Boolean)
+
     override fun onCleared() {
-        compositeDisposable.clear()
+        super.onCleared()
+        cancelJob()
     }
+
+    protected fun cancelJob() {
+        viewModelCoroutineScope.coroutineContext.cancelChildren()
+    }
+
+    abstract fun handleError(error: Throwable)
 }

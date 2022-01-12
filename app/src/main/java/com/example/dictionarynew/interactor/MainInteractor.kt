@@ -1,10 +1,8 @@
 package com.example.dictionarynew.interactor
 
-import android.app.appsearch.SearchResult
 import com.example.dictionarynew.AppState
 import com.example.dictionarynew.model.DataModel
 import com.example.dictionarynew.repositiry.Repository
-import io.reactivex.Observable
 
 class MainInteractor(
     // Снабжаем интерактор репозиторием для получения локальных или внешних
@@ -14,11 +12,13 @@ class MainInteractor(
 ) : IInteractor<AppState> {
     // Интерактор лишь запрашивает у репозитория данные, детали имплементации
     // интерактору неизвестны
-    override fun getData(word: String, fromRemoteSource: Boolean): Observable<AppState> {
-        return if (fromRemoteSource) {
-            remoteRepository.getData(word).map { AppState.Success(it) }
-        } else {
-            localRepository.getData(word).map { AppState.Success(it) }
-        }
+    override suspend fun getData(word: String, fromRemoteSource: Boolean): AppState {
+        return AppState.Success(
+            if (fromRemoteSource) {
+                remoteRepository
+            } else {
+                localRepository
+            }.getData(word)
+        )
     }
 }
