@@ -16,7 +16,9 @@ import com.example.dictionarynew.utils.network.isOnline
 import com.example.dictionarynew.view.BaseActivity
 import com.example.dictionarynew.view.MainAdapter
 import com.example.dictionarynew.view.SearchDialogFragment
+import com.example.dictionarynew.view.description.DescriptionActivity
 import com.example.dictionarynew.viewmodel.MainViewModel
+import com.example.dictionarynew.viewmodel.convertMeaningsToString
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -181,12 +183,28 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
             searchDialogFragment.show(supportFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
         }
 
+//    private val onListItemClickListener: MainAdapter.OnListItemClickListener =
+//        object : MainAdapter.OnListItemClickListener {
+//            override fun onItemClick(data: DataModel) {
+//                Toast.makeText(this@MainActivity, data.text, Toast.LENGTH_SHORT).show()
+//            }
+//        }
+
+    // Слушатель получает от адаптера необходимые данные и запускает новый экран
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
         object : MainAdapter.OnListItemClickListener {
             override fun onItemClick(data: DataModel) {
-                Toast.makeText(this@MainActivity, data.text, Toast.LENGTH_SHORT).show()
+                startActivity(
+                    DescriptionActivity.getIntent(
+                        this@MainActivity,
+                        data.text!!,
+                        convertMeaningsToString(data.meanings!!),
+                        data.meanings[0].imageUrl
+                    )
+                )
             }
         }
+
 
     private val onSearchClickListener: SearchDialogFragment.OnSearchClickListener =
         object : SearchDialogFragment.OnSearchClickListener {
