@@ -9,7 +9,9 @@ import com.example.dictionarynew.datasource.di.koin.injectDependencies
 import com.example.dictionarynew.model.DataModel
 import com.example.dictionarynew.view.BaseActivity
 import kotlinx.android.synthetic.main.activity_history.*
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
+import kotlinx.android.synthetic.main.loading_layout.*
 import org.koin.android.scope.currentScope
 
 class HistoryActivity : BaseActivity<AppState, HistoryInteractor>() {
@@ -52,7 +54,7 @@ class HistoryActivity : BaseActivity<AppState, HistoryInteractor>() {
 
     override fun showViewLoading(progress: Int?) {
         with(history_search_word_loading_layout) {
-            history_loading_frame_layout.visibility = View.VISIBLE
+//            history_loading_frame_layout.visibility = View.VISIBLE
             if (progress != null) {
                 progress_bar_horizontal.visibility = View.VISIBLE
                 progress_bar_round.visibility = View.GONE
@@ -65,6 +67,6 @@ class HistoryActivity : BaseActivity<AppState, HistoryInteractor>() {
     }
 
     override fun showViewWorking() {
-        history_search_word_loading_layout.history_loading_frame_layout.visibility = View.GONE
+//        main_loading_layout.history_loading_frame_layout.visibility = View.GONE
     }
 }

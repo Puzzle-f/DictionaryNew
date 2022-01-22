@@ -11,8 +11,8 @@
         android:fitsSystemWindows="true">
 
     <ProgressBar
-            android:layout_gravity="center"
             android:id="@+id/progress_bar_horizontal"
+            android:layout_gravity="center"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

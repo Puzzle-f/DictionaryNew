@@ -2,6 +2,7 @@ package com.example.dictionarynew
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.Observer
@@ -17,6 +18,7 @@ import com.example.dictionarynew.view.description.DescriptionActivity
 import com.example.dictionarynew.viewmodel.MainViewModel
 import com.example.dictionarynew.viewmodel.convertMeaningsToString
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.loading_layout.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity<AppState, MainInteractor>() {
@@ -99,13 +101,53 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         }
     }
 
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        return when (item.itemId) {
+//            R.id.menu_history -> {
+//                splitInstallManager = SplitInstallManagerFactory.create(applicationContext)
+//                val request = SplitInstallRequest
+//                    .newBuilder()
+//                    .addModule(HISTORY_SEARCH_ACTIVITY_FEATURE_NAME)
+//                    .build()
+//                splitInstallManager
+//                    .startInstall(request)
+//                    .addOnSuccessListener {
+//                        val intent =
+//                            Intent().setClassName(packageName, HISTORY_SEARCH_ACTIVITY_PATH)
+//                        startActivity(intent)
+//                    }
+//                    .addOnFailureListener {
+//                        Toast.makeText(
+//                            applicationContext,
+//                            "Couldn't download feature: " + it.message,
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                    }
+//                true
+//            }
+//            R.id.menu_screen_settings -> {
+//                startActivityForResult(
+//                    Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY),
+//                    SETTINGS_PANEL_REQUEST_CODE
+//                )
+//                true
+//            }
+//            else -> super.onOptionsItemSelected(item)
+//        }
+//    }
+
     override fun showViewWorking() {
-        history_loading_frame_layout.visibility = View.GONE
+//        history_loading_frame_layout.visibility = View.GONE
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.history_menu, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun showViewLoading(progress: Int?) {
         with(main_loading_layout) {
-            history_loading_frame_layout.visibility = View.VISIBLE
+//            history_loading_frame_layout.visibility = View.VISIBLE
 
             if (progress != null) {
                 progress_bar_horizontal.visibility = View.VISIBLE
