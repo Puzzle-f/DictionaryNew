@@ -4,11 +4,17 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/projects/DictionaryNew/app/src/main/res/drawable-v24/bottom_sheet_dialog_background.xml" value="0.1" />
+        <entry key="..\:/projects/DictionaryNew/app/src/main/res/drawable-v24/ic_history.xml" value="0.15555555555555556" />
         <entry key="..\:/projects/DictionaryNew/app/src/main/res/drawable-v24/ic_load_error_vector.xml" value="0.25462962962962965" />
         <entry key="..\:/projects/DictionaryNew/app/src/main/res/drawable-v24/ic_no_photo_vector.xml" value="0.25462962962962965" />
+        <entry key="..\:/projects/DictionaryNew/app/src/main/res/drawable-v24/ic_search.xml" value="0.1" />
+        <entry key="..\:/projects/DictionaryNew/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="..\:/projects/DictionaryNew/app/src/main/res/layout/activity_description.xml" value="0.1" />
+        <entry key="..\:/projects/DictionaryNew/app/src/main/res/layout/activity_history_recyclerview_item.xml" value="0.1" />
         <entry key="..\:/projects/DictionaryNew/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/projects/DictionaryNew/app/src/main/res/layout/activity_main_recyclerview_item.xml" value="0.10277777777777777" />
+        <entry key="..\:/projects/DictionaryNew/app/src/main/res/layout/loading_layout.xml" value="0.1" />
+        <entry key="..\:/projects/DictionaryNew/app/src/main/res/menu/history_menu.xml" value="0.26614583333333336" />
       </map>
     </option>
   </component>

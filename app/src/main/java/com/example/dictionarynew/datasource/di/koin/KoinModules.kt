@@ -1,32 +1,55 @@
 package com.example.dictionarynew.datasource.di.koin
 
+import androidx.room.Room
 import com.example.dictionarynew.datasource.retrofit.RetrofitImplementation
 import com.example.dictionarynew.datasource.room.RoomDataBaseImplementation
 import com.example.dictionarynew.interactor.MainInteractor
-import com.example.dictionarynew.model.DataModel
+import com.example.dictionarynew.model.DataModelDto
+import com.example.dictionarynew.model.history.HistoryActivity
+import com.example.dictionarynew.model.history.HistoryInteractor
+import com.example.dictionarynew.model.history.HistoryViewModel
+import com.example.dictionarynew.model.room.HistoryDataBase
+import com.example.dictionarynew.repositiry.IRepositoryLocal
 import com.example.dictionarynew.repositiry.Repository
 import com.example.dictionarynew.repositiry.RepositoryImplementation
+import com.example.dictionarynew.repositiry.RepositoryImplementationLocal
 import com.example.dictionarynew.viewmodel.MainViewModel
+import org.koin.android.viewmodel.dsl.viewModel
+import org.koin.core.context.loadKoinModules
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-// Для удобства создадим две переменные: в одной находятся зависимости,
-// используемые во всём приложении, во второй - зависимости конкретного экрана
 val application = module {
-    // Функция single сообщает Koin, что эта зависимость должна храниться
-    // в виде синглтона (в Dagger есть похожая аннотация)
-    // Аннотация named выполняет аналогичную Dagger функцию
-//    <Repository<List<DataModel>>> - тип, к которому должен быть приведён результат
-    single<Repository<List<DataModel>>>(named(NAME_REMOTE)) { RepositoryImplementation(
-        RetrofitImplementation()
-    ) }
-    single<Repository<List<DataModel>>>(named(NAME_LOCAL)) { RepositoryImplementation(
-        RoomDataBaseImplementation()
-    ) }
+    // создаём БД
+    single {
+//        Room.inMemoryDatabaseBuilder(get(), HistoryDataBase::class.java).build()  эта БД будет храниться только в ОП
+        Room.databaseBuilder(get(), HistoryDataBase::class.java, "HistoryDB")
+//        .addMigrations()  можно добавить миграцию
+//        .fallbackToDestructiveMigration() удаляет старую версию и устанавливает БД заново. Можно исп. вместо миграции
+        .build() }
+    // Получаем DAO
+    single { get<HistoryDataBase>().historyDao() }
+
+    single<Repository<List<DataModelDto>>> { RepositoryImplementation(RetrofitImplementation()) }
+    single<IRepositoryLocal<List<DataModelDto>>> { RepositoryImplementationLocal(RoomDataBaseImplementation(get()))
+    }
 }
-// Функция factory сообщает Koin, что эту зависимость нужно создавать каждый
-// раз заново, что как раз подходит для Activity и её компонентов.
+
 val mainScreen = module {
-    factory { MainInteractor(get(named(NAME_REMOTE)), get(named(NAME_LOCAL))) }
     factory { MainViewModel(get()) }
+    factory { MainInteractor(get(), get()) }
 }
+
+fun injectDependencies() = loadModules
+
+private val loadModules by lazy {
+    loadKoinModules(listOf(historyScreen))
+}
+
+val historyScreen = module {
+    scope(named<HistoryActivity>()) {
+        scoped { HistoryInteractor(get(), get()) }
+        viewModel { HistoryViewModel(get()) }
+    }
+}
+

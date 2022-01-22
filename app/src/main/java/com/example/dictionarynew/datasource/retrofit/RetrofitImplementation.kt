@@ -3,7 +3,7 @@ package com.example.dictionarynew.datasource.retrofit
 import com.example.dictionarynew.datasource.ApiService
 import com.example.dictionarynew.datasource.BaseInterceptor
 import com.example.dictionarynew.datasource.IDataSource
-import com.example.dictionarynew.model.DataModel
+import com.example.dictionarynew.model.DataModelDto
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -11,9 +11,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitImplementation : IDataSource<List<DataModel>> {
+class RetrofitImplementation : IDataSource<List<DataModelDto>> {
 
-    override suspend fun getData(word: String): List<DataModel> {
+    override suspend fun getData(word: String): List<DataModelDto> {
         return getService(BaseInterceptor.interceptor).searchAsync(word).await()
 //        return getService(BaseInterceptor.interceptor).searchAsync(word).await()
     }

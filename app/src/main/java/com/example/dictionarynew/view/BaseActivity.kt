@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.dictionarynew.AppState
 import com.example.dictionarynew.R
 import com.example.dictionarynew.interactor.IInteractor
+import com.example.dictionarynew.model.DataModel
 import com.example.dictionarynew.utils.network.isOnline
 import com.example.dictionarynew.utils.ui.AlertDialogFragment
 import com.example.dictionarynew.viewmodel.BaseViewModel
@@ -37,16 +38,46 @@ abstract class BaseActivity<T : AppState, I : IInteractor<T>> : AppCompatActivit
     }
 
     protected fun showAlertDialog(title: String?, message: String?) {
-        AlertDialogFragment.newInstance(title, message).show(supportFragmentManager, DIALOG_FRAGMENT_TAG)
+        AlertDialogFragment.newInstance(title, message)
+            .show(supportFragmentManager, DIALOG_FRAGMENT_TAG)
     }
 
     private fun isDialogNull(): Boolean {
         return supportFragmentManager.findFragmentByTag(DIALOG_FRAGMENT_TAG) == null
     }
 
-    abstract fun renderData(dataModel: T)
+    protected fun renderData(appState: T) {
+        when (appState) {
+            is AppState.Success -> {
+                showViewWorking()
+                appState.data?.let {
+                    if (it.isEmpty()) {
+                        showAlertDialog(
+                            getString(R.string.dialog_tittle_sorry),
+                            getString(R.string.empty_server_response_on_success)
+                        )
+                    } else {
+                        setDataToAdapter(it)
+                    }
+                }
+            }
+            is AppState.Loading -> {
+                showViewLoading(appState.progress)
+            }
+            is AppState.Error -> {
+                showViewWorking()
+                showAlertDialog(getString(R.string.error_textview_stub), appState.error.message)
+            }
+        }
+    }
 
     companion object {
         private const val DIALOG_FRAGMENT_TAG = "74a54328-5d62-46bf-ab6b-cbf5d8c79522"
     }
+
+    abstract fun setDataToAdapter(data: List<DataModel>)
+
+    abstract fun showViewLoading(progress: Int?)
+
+    abstract fun showViewWorking()
 }
