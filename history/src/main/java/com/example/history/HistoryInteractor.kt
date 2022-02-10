@@ -1,4 +1,4 @@
-package com.example.dictionarynew.model.history
+package com.example.history
 
 import com.example.dictionarynew.AppState
 import com.example.dictionarynew.interactor.IInteractor
@@ -8,7 +8,7 @@ import com.example.dictionarynew.repositiry.Repository
 import com.example.dictionarynew.viewmodel.mapSearchResultToResult
 
 // Класс мало чем отличается от интерактора, который мы уже описывали
-//class HistoryInteractor(
+//class com.example.history.HistoryInteractor(
 //    private val repositoryRemote: Repository<List<DataModel>>,
 //    private val repositoryLocal: IRepositoryLocal<List<DataModel>>
 //) : IInteractor<AppState> {

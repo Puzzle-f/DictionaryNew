@@ -1,4 +1,4 @@
-package com.example.dictionarynew.model.history
+package com.example.history
 
 import androidx.lifecycle.LiveData
 import com.example.dictionarynew.AppState

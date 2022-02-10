@@ -14,7 +14,11 @@
         <entry key="..\:/projects/DictionaryNew/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/projects/DictionaryNew/app/src/main/res/layout/activity_main_recyclerview_item.xml" value="0.10277777777777777" />
         <entry key="..\:/projects/DictionaryNew/app/src/main/res/layout/loading_layout.xml" value="0.1" />
+        <entry key="..\:/projects/DictionaryNew/app/src/main/res/layout/loading_layout_history.xml" value="0.22916666666666666" />
         <entry key="..\:/projects/DictionaryNew/app/src/main/res/menu/history_menu.xml" value="0.1" />
+        <entry key="..\:/projects/DictionaryNew/history/src/main/res/layout/activity_history_recyclerview_item.xml" value="0.1" />
+        <entry key="..\:/projects/DictionaryNew/history/src/main/res/layout/del.xml" value="0.25416666666666665" />
+        <entry key="..\:/projects/DictionaryNew/history/src/main/res/layout/loading_layout.xml" value="0.25416666666666665" />
       </map>
     </option>
   </component>

@@ -1,17 +1,14 @@
-package com.example.dictionarynew.model.history
+package com.example.history
 
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import com.example.dictionarynew.AppState
-import com.example.dictionarynew.R
-import com.example.dictionarynew.datasource.di.koin.injectDependencies
 import com.example.dictionarynew.model.DataModel
 import com.example.dictionarynew.view.BaseActivity
+import com.example.history.di.injectDependenciesHistory
 import kotlinx.android.synthetic.main.activity_history.*
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.*
-import kotlinx.android.synthetic.main.loading_layout.*
+import kotlinx.android.synthetic.main.loading_layout_history.*
 import org.koin.android.scope.currentScope
 
 class HistoryActivity : BaseActivity<AppState, HistoryInteractor>() {
@@ -39,13 +36,13 @@ class HistoryActivity : BaseActivity<AppState, HistoryInteractor>() {
         if (history_activity_recyclerview.adapter != null) {
             throw IllegalStateException("The ViewModel should be initialised first")
         }
-        injectDependencies()
+        injectDependenciesHistory()
         val vm: HistoryViewModel by currentScope.inject()
-//        val viewModel: HistoryViewModel by viewModel()
+//        val viewModel: com.example.history.HistoryViewModel by viewModel()
 //        model = viewModel
         model = vm
         model.subscribe()
-            .observe(this@HistoryActivity, Observer<AppState> { renderData(it) })
+            .observe(this@HistoryActivity, { renderData(it) })
     }
 
     private fun initViews() {

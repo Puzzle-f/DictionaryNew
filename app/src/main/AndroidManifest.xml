@@ -22,8 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<!--        <activity android:name="com.example.history.HistoryActivity"/>-->
         <activity android:name=".view.description.DescriptionActivity"/>
-        <activity android:name=".model.history.HistoryActivity"/>
     </application>
 
 </manifest>

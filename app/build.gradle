@@ -43,6 +43,7 @@ dependencies {
     implementation MyMain.appcompat
     implementation MyMain.material
     implementation MyMain.constraintlayout
+    implementation 'com.google.android.play:core-ktx:1.8.1'
     testImplementation MyMain.junit
     androidTestImplementation MyMain.ext_junit
 //    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
