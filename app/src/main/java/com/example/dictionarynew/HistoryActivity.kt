@@ -1,12 +1,10 @@
-package com.example.history
+package com.example.dictionarynew
+
 
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.Observer
-import com.example.dictionarynew.AppState
 import com.example.dictionarynew.model.DataModel
 import com.example.dictionarynew.view.BaseActivity
-import com.example.history.di.injectDependenciesHistory
 import kotlinx.android.synthetic.main.activity_history.*
 import kotlinx.android.synthetic.main.loading_layout_history.*
 import org.koin.android.scope.currentScope
@@ -38,7 +36,7 @@ class HistoryActivity : BaseActivity<AppState, HistoryInteractor>() {
         }
         injectDependenciesHistory()
         val vm: HistoryViewModel by currentScope.inject()
-//        val viewModel: com.example.history.HistoryViewModel by viewModel()
+//        val viewModel: com.example.dictionarynew.HistoryViewModel by viewModel()
 //        model = viewModel
         model = vm
         model.subscribe()

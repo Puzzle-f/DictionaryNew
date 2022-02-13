@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dictionarynew.interactor.MainInteractor
@@ -17,21 +16,18 @@ import com.example.dictionarynew.view.SearchDialogFragment
 import com.example.dictionarynew.view.description.DescriptionActivity
 import com.example.dictionarynew.viewmodel.MainViewModel
 import com.example.dictionarynew.viewmodel.convertMeaningsToString
-import com.google.android.play.core.splitinstall.SplitInstallManager
-import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
-import com.google.android.play.core.splitinstall.SplitInstallRequest
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.loading_layout.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 private const val HISTORY_SEARCH_ACTIVITY_PATH =
-    "com.example.history.HistoryActivity"
+    "com.example.dictionarynew.HistoryActivity"
 const val HISTORY_SEARCH_ACTIVITY_FEATURE_NAME = "history"
 
 class MainActivity : BaseActivity<AppState, MainInteractor>() {
 
     override lateinit var model: MainViewModel
-    private lateinit var splitInstallManager: SplitInstallManager
+//    private lateinit var splitInstallManager: SplitInstallManager
 
     private val adapter: MainAdapter by lazy { MainAdapter(onListItemClickListener) }
     private val fabClickListener: View.OnClickListener =
@@ -102,9 +98,9 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_history -> {
-//                startActivity(Intent(this, com.example.history.HistoryActivity::class.java))
-                val intent1 = Intent().setClassName(packageName, HISTORY_SEARCH_ACTIVITY_PATH)
-                startActivity(intent1)
+                startActivity(Intent(this, HistoryActivity::class.java))
+//                val intent1 = Intent().setClassName(packageName, HISTORY_SEARCH_ACTIVITY_PATH)
+//                startActivity(intent1)
                 true
             }
             else -> super.onOptionsItemSelected(item)

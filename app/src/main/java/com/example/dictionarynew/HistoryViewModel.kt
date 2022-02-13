@@ -1,7 +1,6 @@
-package com.example.history
+package com.example.dictionarynew
 
 import androidx.lifecycle.LiveData
-import com.example.dictionarynew.AppState
 import com.example.dictionarynew.viewmodel.BaseViewModel
 import com.example.dictionarynew.viewmodel.parseLocalSearchResults
 import kotlinx.coroutines.launch

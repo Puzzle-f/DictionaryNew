@@ -1,9 +1,6 @@
-package com.example.history.di
+package com.example.dictionarynew
 
 import android.util.Log
-import com.example.history.HistoryActivity
-import com.example.history.HistoryInteractor
-import com.example.history.HistoryViewModel
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.loadKoinModules
 import org.koin.core.qualifier.named

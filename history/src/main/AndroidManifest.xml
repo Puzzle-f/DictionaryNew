@@ -5,7 +5,7 @@
 
     <application
         android:fullBackupContent="true">
-        <activity android:name=".HistoryActivity" />
+        <activity android:name="com.example.dictionarynew.HistoryActivity" />
     </application>
 
     <dist:module
