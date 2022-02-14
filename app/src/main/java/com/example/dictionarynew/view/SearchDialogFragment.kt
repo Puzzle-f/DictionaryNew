@@ -10,7 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.example.dictionarynew.R
 import com.example.dictionarynew.databinding.SearchDialogFragmentBinding
-import com.example.dictionarynew.getEmptyString
+import com.example.utils.getEmptyString
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputEditText
 

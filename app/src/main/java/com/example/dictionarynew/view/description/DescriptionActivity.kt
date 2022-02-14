@@ -14,7 +14,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.example.dictionarynew.R
 import com.example.dictionarynew.utils.network.isOnline
-import com.example.dictionarynew.utils.ui.AlertDialogFragment
+import com.example.utils.AlertDialogFragment
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_description.*
@@ -65,7 +65,7 @@ class DescriptionActivity : AppCompatActivity() {
         if (isOnline(applicationContext)) {
             setData()
         } else {
-            AlertDialogFragment.newInstance(
+            com.example.utils.AlertDialogFragment.newInstance(
                 getString(R.string.dialog_title_device_is_offline),
                 getString(R.string.dialog_message_device_is_offline)
             ).show(

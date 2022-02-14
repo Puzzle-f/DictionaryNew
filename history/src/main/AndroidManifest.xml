@@ -5,16 +5,7 @@
 
     <application
         android:fullBackupContent="true">
-        <activity android:name="com.example.dictionarynew.HistoryActivity" />
+        <activity android:name=".HistoryActivity" />
     </application>
-
-    <dist:module
-        dist:instant="false">
-        <dist:delivery>
-            <dist:on-demand />
-        </dist:delivery>
-        <dist:fusing dist:include="true" />
-
-    </dist:module>
 
 </manifest>

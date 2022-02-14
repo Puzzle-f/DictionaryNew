@@ -8,23 +8,21 @@ import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dictionarynew.interactor.MainInteractor
-import com.example.dictionarynew.model.DataModel
+import com.example.model.DataModel
 import com.example.dictionarynew.utils.network.isOnline
-import com.example.dictionarynew.view.BaseActivity
+import com.example.core.viewmodel.BaseActivity
 import com.example.dictionarynew.view.MainAdapter
 import com.example.dictionarynew.view.SearchDialogFragment
 import com.example.dictionarynew.view.description.DescriptionActivity
-import com.example.dictionarynew.viewmodel.MainViewModel
-import com.example.dictionarynew.viewmodel.convertMeaningsToString
+import com.example.core.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.loading_layout.*
-import org.koin.android.viewmodel.ext.android.viewModel
 
 private const val HISTORY_SEARCH_ACTIVITY_PATH =
-    "com.example.dictionarynew.HistoryActivity"
+    "com.example.history.HistoryActivity"
 const val HISTORY_SEARCH_ACTIVITY_FEATURE_NAME = "history"
 
-class MainActivity : BaseActivity<AppState, MainInteractor>() {
+class MainActivity : com.example.core.viewmodel.BaseActivity<com.example.model.AppState, MainInteractor>() {
 
     override lateinit var model: MainViewModel
 //    private lateinit var splitInstallManager: SplitInstallManager
@@ -40,12 +38,12 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     // Слушатель получает от адаптера необходимые данные и запускает новый экран
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
         object : MainAdapter.OnListItemClickListener {
-            override fun onItemClick(data: DataModel) {
+            override fun onItemClick(data: com.example.model.DataModel) {
                 startActivity(
                     DescriptionActivity.getIntent(
                         this@MainActivity,
                         data.text,
-                        convertMeaningsToString(data.meanings),
+                        com.example.repository.convertMeaningsToString(data.meanings),
                         data.meanings[0].imageUrl
                     )
                 )
@@ -77,7 +75,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         }
         val viewModel: MainViewModel by viewModel()
         model = viewModel
-        model.subscribe().observe(this@MainActivity, Observer<AppState> { renderData(it) })
+        model.subscribe().observe(this@MainActivity, Observer<com.example.model.AppState> { renderData(it) })
     }
 
     private fun initViews() {
@@ -91,14 +89,14 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
             "74a54328-5d62-46bf-ab6b-cbf5fgt0-092395"
     }
 
-    override fun setDataToAdapter(data: List<DataModel>) {
+    override fun setDataToAdapter(data: List<com.example.model.DataModel>) {
         adapter.setData(data)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_history -> {
-                startActivity(Intent(this, HistoryActivity::class.java))
+                startActivity(Intent(this, com.example.history.HistoryActivity::class.java))
 //                val intent1 = Intent().setClassName(packageName, HISTORY_SEARCH_ACTIVITY_PATH)
 //                startActivity(intent1)
                 true

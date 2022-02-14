@@ -14,8 +14,13 @@ private val loadModulesHistory by lazy {
 }
 
 val historyScreen = module {
-    scope(named<HistoryActivity>()) {
-        scoped { HistoryInteractor(repositoryRemote = get(),repositoryLocal = get()) }
-        viewModel { HistoryViewModel(get()) }
+    scope(named<com.example.history.HistoryActivity>()) {
+        scoped {
+            com.example.history.HistoryInteractor(
+                repositoryRemote = get(),
+                repositoryLocal = get()
+            )
+        }
+        viewModel { com.example.history.HistoryViewModel(get()) }
     }
 }

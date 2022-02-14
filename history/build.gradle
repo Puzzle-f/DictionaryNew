@@ -52,9 +52,8 @@ dependencies {
     implementation Koin.koinViewModel
 
     //  Modules
-    implementation project(Modules.app)
-//    implementation project(Modules.repository)
-//    implementation project(Modules.model)
-
+    implementation project(Modules.model)
+    implementation project(Modules.repository)
+    implementation project(Modules.core)
 
 }

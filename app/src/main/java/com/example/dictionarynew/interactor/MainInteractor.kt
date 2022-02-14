@@ -1,23 +1,23 @@
 package com.example.dictionarynew.interactor
 
-import com.example.dictionarynew.AppState
-import com.example.dictionarynew.model.DataModelDto
-import com.example.dictionarynew.repositiry.IRepositoryLocal
-import com.example.dictionarynew.repositiry.Repository
-import com.example.dictionarynew.viewmodel.mapSearchResultToResult
+import com.example.model.AppState
+import com.example.model.DataModelDto
+import com.example.repository.IRepositoryLocal
+import com.example.repository.Repository
+import com.example.core.viewmodel.mapSearchResultToResult
 
 class MainInteractor(
-    private val repositoryRemote: Repository<List<DataModelDto>>,
-    private val repositoryLocal: IRepositoryLocal<List<DataModelDto>>
-) : IInteractor<AppState> {
+    private val repositoryRemote: com.example.repository.Repository<List<com.example.model.DataModelDto>>,
+    private val repositoryLocal: com.example.repository.IRepositoryLocal<List<com.example.model.DataModelDto>>
+) : com.example.core.viewmodel.IInteractor<com.example.model.AppState> {
 
-    override suspend fun getData(word: String, fromRemoteSource: Boolean): AppState {
-        val appState: AppState
+    override suspend fun getData(word: String, fromRemoteSource: Boolean): com.example.model.AppState {
+        val appState: com.example.model.AppState
         if (fromRemoteSource) {
-            appState = AppState.Success(mapSearchResultToResult(repositoryRemote.getData(word)))
+            appState = com.example.model.AppState.Success(mapSearchResultToResult(repositoryRemote.getData(word)))
             repositoryLocal.saveToDB(appState)
         } else {
-            appState = AppState.Success(mapSearchResultToResult(repositoryLocal.getData(word)))
+            appState = com.example.model.AppState.Success(mapSearchResultToResult(repositoryLocal.getData(word)))
         }
         return appState
     }
