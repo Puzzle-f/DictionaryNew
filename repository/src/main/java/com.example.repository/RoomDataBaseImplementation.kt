@@ -1,11 +1,5 @@
 package com.example.repository
 
-import com.example.model.AppState
-import com.example.model.DataModelDto
-import com.example.core.viewmodel.convertDataModelSuccessToEntity
-import com.example.core.viewmodel.mapHistoryEntityToSearchResult
-
-
 
 // Теперь наш локальный репозиторий работает. Передаём в конструктор
 // HistoryDao (вспоминаем в модуле Koin RoomDataBaseImplementation(get())).

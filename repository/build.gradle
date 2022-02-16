@@ -31,6 +31,8 @@ android {
     }
 }
 
+apply plugin: 'kotlin-kapt'
+
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -41,5 +43,21 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     implementation project(Modules.model)
+
+    //    Coroutines
+    implementation Coroutines.coroutinesCore
+    implementation Coroutines.coroutinesAndroid
+    implementation Coroutines.coroutinesAdapter
+
+    // Retrofit 2
+    implementation Retrofit.retrofit
+    implementation Retrofit.converterGson
+    implementation Retrofit.loggingInterceptor
+    implementation Retrofit.rxjava2Aapter
+
+    // Room
+    implementation Room.roomRuntime
+    kapt Room.roomCompiler
+    implementation Room.roomKtx
 
 }

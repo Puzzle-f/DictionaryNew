@@ -1,15 +1,8 @@
 package com.example.history
 
-import com.example.dictionarynew.AppState
-import com.example.dictionarynew.model.DataModel
-import com.example.dictionarynew.model.DataModelDto
-import com.example.dictionarynew.model.Meanings
-import com.example.dictionarynew.model.Translation
-import com.example.dictionarynew.model.room.HistoryEntity
+import com.example.model.AppState
 import com.example.model.DataModel
-import com.example.repository.getSuccessResultData
-import com.example.repository.parseOnlineResult
-import java.util.ArrayList
+import java.util.*
 
 //fun mapSearchResultToResult(searchResults: List<DataModelDto>): List<DataModel> {
 //    return searchResults.map { searchResult ->
@@ -32,12 +25,12 @@ fun parseLocalSearchResults(appState: AppState): AppState {
 }
 
 private fun mapResult(
-    data: com.example.model.AppState,
+    data: AppState,
     isOnline: Boolean
-): List<com.example.model.DataModel> {
-    val newSearchResults = arrayListOf<com.example.model.DataModel>()
+): List<DataModel> {
+    val newSearchResults = arrayListOf<DataModel>()
     when (data) {
-        is com.example.model.AppState.Success -> {
+        is AppState.Success -> {
             getSuccessResultData(data, isOnline, newSearchResults)
         }
     }
@@ -46,11 +39,11 @@ private fun mapResult(
 
 
 private fun getSuccessResultData(
-    data: com.example.model.AppState.Success,
+    data: AppState.Success,
     isOnline: Boolean,
     newDataModels: ArrayList<DataModel>
 ) {
-    val dataModels: List<com.example.model.DataModel> = data.data as List<com.example.model.DataModel>
+    val dataModels: List<DataModel> = data.data as List<DataModel>
     if (dataModels.isNotEmpty()) {
         if (isOnline) {
             for (searchResult in dataModels) {
@@ -59,7 +52,7 @@ private fun getSuccessResultData(
         } else {
             for (searchResult in dataModels) {
                 newDataModels.add(
-                    com.example.model.DataModel(
+                    DataModel(
                         searchResult.text,
                         arrayListOf()
                     )
@@ -69,8 +62,11 @@ private fun getSuccessResultData(
     }
 }
 
-private fun parseOnlineResult(dataModel: com.example.model.DataModel, newDataModels: ArrayList<com.example.model.DataModel>) {
-    if (dataModel.text!!.isNotBlank() && !dataModel.meanings.isNullOrEmpty()) {
+private fun parseOnlineResult(
+    dataModel: DataModel,
+    newDataModels: ArrayList<DataModel>
+) {
+    if (dataModel.text.isNotBlank() && !dataModel.meanings.isNullOrEmpty()) {
         val newMeanings = arrayListOf<com.example.model.Meanings>()
         for (meaning in dataModel.meanings) {
             if (meaning.translation?.translation!!.isNotBlank()) {
@@ -83,7 +79,7 @@ private fun parseOnlineResult(dataModel: com.example.model.DataModel, newDataMod
             }
         }
         if (newMeanings.isNotEmpty()) {
-            newDataModels.add(com.example.model.DataModel(dataModel.text, newMeanings))
+            newDataModels.add(DataModel(dataModel.text, newMeanings))
         }
     }
 }

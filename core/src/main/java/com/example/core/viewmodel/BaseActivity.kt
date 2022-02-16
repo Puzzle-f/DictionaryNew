@@ -3,11 +3,11 @@ package com.example.core.viewmodel
 import android.os.Bundle
 import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.dictionarynew.AppState
-import com.example.dictionarynew.R
-import com.example.dictionarynew.model.DataModel
-import com.example.dictionarynew.utils.network.isOnline
-import com.example.dictionarynew.utils.ui.AlertDialogFragment
+import com.example.core.R
+import com.example.model.AppState
+import com.example.model.DataModel
+import com.example.utils.AlertDialogFragment
+import geekbrains.ru.utils.network.isOnline
 
 abstract class BaseActivity<T : AppState, I : IInteractor<T>> : AppCompatActivity() {
 

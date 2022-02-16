@@ -2,7 +2,8 @@ package com.example.history
 
 import androidx.lifecycle.LiveData
 import com.example.core.viewmodel.BaseViewModel
-import com.example.dictionarynew.AppState
+import com.example.model.AppState
+import kotlinx.coroutines.launch
 
 class HistoryViewModel(private val interactor: HistoryInteractor) :
     BaseViewModel<AppState>() {
@@ -21,7 +22,7 @@ class HistoryViewModel(private val interactor: HistoryInteractor) :
 
     private suspend fun startInteractor(word: String, isOnline: Boolean) {
         _mutableLiveData.postValue(
-            com.example.dictionarynew.parseLocalSearchResults(
+            parseLocalSearchResults(
                 interactor.getData(
                     word,
                     isOnline

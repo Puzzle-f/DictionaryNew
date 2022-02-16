@@ -1,5 +1,8 @@
 package com.example.repository
 
+import com.example.model.AppState
+import com.example.model.DataModelDto
+
 // Принимаем на вход список слов в виде таблицы из БД и переводим его в
 // List<SearchResult>
 fun mapHistoryEntityToSearchResult(list: List<HistoryEntity>): List<DataModelDto> {

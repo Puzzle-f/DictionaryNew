@@ -2,7 +2,7 @@ package com.example.core.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.dictionarynew.AppState
+import com.example.model.AppState
 import kotlinx.coroutines.*
 
 abstract class BaseViewModel<T : AppState>(
@@ -14,7 +14,7 @@ abstract class BaseViewModel<T : AppState>(
                 + CoroutineExceptionHandler { _, throwable ->
             handleError(throwable)
         }
-        )
+    )
 
     abstract fun getData(word: String, isOnline: Boolean)
 

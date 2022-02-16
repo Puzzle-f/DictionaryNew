@@ -13,10 +13,9 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.example.dictionarynew.R
-import com.example.dictionarynew.utils.network.isOnline
-import com.example.utils.AlertDialogFragment
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
+import geekbrains.ru.utils.network.isOnline
 import kotlinx.android.synthetic.main.activity_description.*
 
 class DescriptionActivity : AppCompatActivity() {
@@ -27,9 +26,10 @@ class DescriptionActivity : AppCompatActivity() {
 
         setActionbarHomeButtonAsUp()
         // Устанавливаем слушатель обновления экрана
-        description_screen_swipe_refresh_layout.setOnRefreshListener{ startLoadingOrShowError() }
+        description_screen_swipe_refresh_layout.setOnRefreshListener { startLoadingOrShowError() }
         setData()
     }
+
     // Переопределяем нажатие на стрелку Назад, чтобы возвращаться по нему
     // на главный экран
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -41,11 +41,13 @@ class DescriptionActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
     // Устанавливаем кнопку Назад в ActionBar
     private fun setActionbarHomeButtonAsUp() {
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
+
     // Достаём данные (слово, перевод и ссылку) из бандла и загружаем
     // изображение
     private fun setData() {
@@ -75,12 +77,14 @@ class DescriptionActivity : AppCompatActivity() {
             stopRefreshAnimationIfNeeded()
         }
     }
+
     // Метод, следящий за сокрытием спиннера загрузки при обновлении страницы
     private fun stopRefreshAnimationIfNeeded() {
         if (description_screen_swipe_refresh_layout.isRefreshing) {
             description_screen_swipe_refresh_layout.isRefreshing = false
         }
     }
+
     private fun usePicassoToLoadPhoto(imageView: ImageView, imageLink: String) {
         Picasso.with(applicationContext).load("https:$imageLink")
             .placeholder(R.drawable.ic_no_photo_vector)

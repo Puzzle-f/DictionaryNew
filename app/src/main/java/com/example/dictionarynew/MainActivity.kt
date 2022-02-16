@@ -7,22 +7,25 @@ import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.dictionarynew.interactor.MainInteractor
-import com.example.model.DataModel
-import com.example.dictionarynew.utils.network.isOnline
 import com.example.core.viewmodel.BaseActivity
+import com.example.dictionarynew.interactor.MainInteractor
 import com.example.dictionarynew.view.MainAdapter
+import com.example.dictionarynew.view.MainViewModel
 import com.example.dictionarynew.view.SearchDialogFragment
+import com.example.dictionarynew.view.convertMeaningsToString
 import com.example.dictionarynew.view.description.DescriptionActivity
-import com.example.core.viewmodel.MainViewModel
+import com.example.model.AppState
+import com.example.model.DataModel
+import geekbrains.ru.utils.network.isOnline
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.loading_layout.*
+import org.koin.android.viewmodel.ext.android.viewModel
 
 private const val HISTORY_SEARCH_ACTIVITY_PATH =
     "com.example.history.HistoryActivity"
 const val HISTORY_SEARCH_ACTIVITY_FEATURE_NAME = "history"
 
-class MainActivity : com.example.core.viewmodel.BaseActivity<com.example.model.AppState, MainInteractor>() {
+class MainActivity : BaseActivity<AppState, MainInteractor>() {
 
     override lateinit var model: MainViewModel
 //    private lateinit var splitInstallManager: SplitInstallManager
@@ -38,12 +41,13 @@ class MainActivity : com.example.core.viewmodel.BaseActivity<com.example.model.A
     // Слушатель получает от адаптера необходимые данные и запускает новый экран
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
         object : MainAdapter.OnListItemClickListener {
-            override fun onItemClick(data: com.example.model.DataModel) {
+            override fun onItemClick(data: DataModel) {
                 startActivity(
                     DescriptionActivity.getIntent(
                         this@MainActivity,
                         data.text,
-                        com.example.repository.convertMeaningsToString(data.meanings),
+//                       repository.
+                        convertMeaningsToString(data.meanings),
                         data.meanings[0].imageUrl
                     )
                 )
@@ -75,7 +79,8 @@ class MainActivity : com.example.core.viewmodel.BaseActivity<com.example.model.A
         }
         val viewModel: MainViewModel by viewModel()
         model = viewModel
-        model.subscribe().observe(this@MainActivity, Observer<com.example.model.AppState> { renderData(it) })
+        model.subscribe()
+            .observe(this@MainActivity, Observer<com.example.model.AppState> { renderData(it) })
     }
 
     private fun initViews() {

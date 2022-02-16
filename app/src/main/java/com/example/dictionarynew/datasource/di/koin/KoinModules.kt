@@ -1,16 +1,8 @@
 package com.example.dictionarynew.datasource.di.koin
 
 import androidx.room.Room
-import com.example.repository.RetrofitImplementation
-import com.example.repository.RoomDataBaseImplementation
 import com.example.dictionarynew.interactor.MainInteractor
-import com.example.model.DataModelDto
-import com.example.repository.HistoryDataBase
-import com.example.repository.IRepositoryLocal
-import com.example.repository.Repository
-import com.example.repository.RepositoryImplementation
-import com.example.repository.RepositoryImplementationLocal
-import com.example.core.viewmodel.MainViewModel
+import com.example.dictionarynew.view.MainViewModel
 import org.koin.dsl.module
 
 val application = module {

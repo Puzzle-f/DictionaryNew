@@ -12,7 +12,9 @@ class TranslatorApp : Application() {
         startKoin {
 //            кладём контекст внутрь Koin
             androidContext(applicationContext)
-            modules(listOf(application, mainScreen))
+            modules(listOf(application, mainScreen,
+                historyScreen
+            ))
 //            androidContext(this@TranslatorApp)
         }
     }

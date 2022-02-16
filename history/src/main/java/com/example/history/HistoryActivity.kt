@@ -2,15 +2,15 @@ package com.example.history
 
 
 import android.os.Bundle
-import com.example.dictionarynew.model.DataModel
+import android.view.View
 import com.example.core.viewmodel.BaseActivity
-import com.example.dictionarynew.AppState
-import com.example.dictionarynew.R
-import com.example.dictionarynew.injectDependenciesHistory
+import com.example.model.AppState
+import com.example.model.DataModel
 import kotlinx.android.synthetic.main.activity_history.*
 import kotlinx.android.synthetic.main.loading_layout_history.*
+import org.koin.android.scope.currentScope
 
-class HistoryActivity : com.example.core.viewmodel.BaseActivity<AppState, HistoryInteractor>() {
+class HistoryActivity : BaseActivity<AppState, HistoryInteractor>() {
 
     override lateinit var model: HistoryViewModel
     private val adapter: HistoryAdapter by lazy { HistoryAdapter() }
@@ -35,7 +35,7 @@ class HistoryActivity : com.example.core.viewmodel.BaseActivity<AppState, Histor
         if (history_activity_recyclerview.adapter != null) {
             throw IllegalStateException("The ViewModel should be initialised first")
         }
-        injectDependenciesHistory()
+//        injectDependenciesHistory()
         val vm: HistoryViewModel by currentScope.inject()
 //        val viewModel: com.example.history.HistoryViewModel by viewModel()
 //        model = viewModel

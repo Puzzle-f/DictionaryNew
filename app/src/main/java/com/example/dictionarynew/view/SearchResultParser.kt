@@ -1,5 +1,7 @@
 package com.example.dictionarynew.view
 
+import com.example.model.*
+
 fun parseOnlineSearchResults(state: AppState): AppState {
     return AppState.Success(mapResult(state, true))
 }
@@ -60,4 +62,19 @@ fun convertMeaningsToString(meanings: List<Meanings>): String {
         }
     }
     return meaningsSeparatedByComma
+}
+
+fun mapSearchResultToResult(searchResults: List<DataModelDto>): List<DataModel> {
+    return searchResults.map { searchResult ->
+        var meanings: List<Meanings> = listOf()
+        searchResult.meanings?.let {
+            meanings = it.map { meaningsDto ->
+                Meanings(
+                    Translation(meaningsDto?.translation?.translation ?: ""),
+                    meaningsDto?.imageUrl ?: ""
+                )
+            }
+        }
+        DataModel(searchResult.text ?: "", meanings)
+    }
 }
