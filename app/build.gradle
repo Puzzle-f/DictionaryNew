@@ -111,6 +111,9 @@ dependencies {
     implementation project(Modules.utils)
     implementation project(Modules.history)
 
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
+
+
 }
 
 apply plugin: "org.jetbrains.kotlin.kapt"

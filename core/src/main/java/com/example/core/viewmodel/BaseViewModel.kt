@@ -10,10 +10,10 @@ abstract class BaseViewModel<T : AppState>(
 ) : ViewModel() {
     protected val viewModelCoroutineScope = CoroutineScope(
         Dispatchers.Main
-                + SupervisorJob() // чтобы все корутины не падали из-за ошибки в одной корутине
-                + CoroutineExceptionHandler { _, throwable ->
-            handleError(throwable)
-        }
+//                + SupervisorJob() // чтобы все корутины не падали из-за ошибки в одной корутине
+//                + CoroutineExceptionHandler { _, throwable ->
+//            handleError(throwable)
+//        }
     )
 
     abstract fun getData(word: String, isOnline: Boolean)

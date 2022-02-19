@@ -2,12 +2,15 @@ package com.example.dictionarynew
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.lifecycle.Observer
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.core.viewmodel.BaseActivity
+import com.example.dictionarynew.datasource.di.koin.injectDependencies
 import com.example.dictionarynew.interactor.MainInteractor
 import com.example.dictionarynew.view.MainAdapter
 import com.example.dictionarynew.view.MainViewModel
@@ -16,10 +19,14 @@ import com.example.dictionarynew.view.convertMeaningsToString
 import com.example.dictionarynew.view.description.DescriptionActivity
 import com.example.model.AppState
 import com.example.model.DataModel
+import com.example.utils.viewById
+import com.google.android.play.core.splitinstall.SplitInstallManager
+import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
+import com.google.android.play.core.splitinstall.SplitInstallRequest
 import geekbrains.ru.utils.network.isOnline
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.loading_layout.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.android.scope.currentScope
 
 private const val HISTORY_SEARCH_ACTIVITY_PATH =
     "com.example.history.HistoryActivity"
@@ -28,10 +35,11 @@ const val HISTORY_SEARCH_ACTIVITY_FEATURE_NAME = "history"
 class MainActivity : BaseActivity<AppState, MainInteractor>() {
 
     override lateinit var model: MainViewModel
-//    private lateinit var splitInstallManager: SplitInstallManager
+    private lateinit var splitInstallManager: SplitInstallManager
+private val mainActivityRecyclerview by viewById<RecyclerView>(R.id.main_activity_recyclerview)
 
     private val adapter: MainAdapter by lazy { MainAdapter(onListItemClickListener) }
-    private val fabClickListener: View.OnClickListener =
+    private val searchFabClickListener: View.OnClickListener =
         View.OnClickListener {
             val searchDialogFragment = SearchDialogFragment.newInstance()
             searchDialogFragment.setOnSearchClickListener(onSearchClickListener)
@@ -73,20 +81,29 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         initViews()
     }
 
+//    private fun iniViewModel() {
+//        if (main_activity_recyclerview.adapter != null) {
+//            throw IllegalStateException("The ViewModel should be initialised first")
+//        }
+//        val viewModel: MainViewModel by viewModel()
+//        model = viewModel
+//        model.subscribe()
+//            .observe(this@MainActivity, Observer<com.example.model.AppState> { renderData(it) })
+//    }
+
     private fun iniViewModel() {
-        if (main_activity_recyclerview.adapter != null) {
-            throw IllegalStateException("The ViewModel should be initialised first")
-        }
-        val viewModel: MainViewModel by viewModel()
-        model = viewModel
-        model.subscribe()
-            .observe(this@MainActivity, Observer<com.example.model.AppState> { renderData(it) })
+        check(main_activity_recyclerview.adapter == null) { "The mainViewModel should be initialised first" }
+        injectDependencies()
+        val mainViewModel: MainViewModel by currentScope.inject()
+        model = mainViewModel
+        model.subscribe().observe(this@MainActivity, { renderData(it) })
     }
 
     private fun initViews() {
-        search_fab.setOnClickListener(fabClickListener)
-        main_activity_recyclerview.layoutManager = LinearLayoutManager(applicationContext)
         main_activity_recyclerview.adapter = adapter
+        search_fab.setOnClickListener(searchFabClickListener)
+        main_activity_recyclerview.layoutManager = LinearLayoutManager(applicationContext)
+
     }
 
     companion object {
@@ -94,16 +111,15 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
             "74a54328-5d62-46bf-ab6b-cbf5fgt0-092395"
     }
 
-    override fun setDataToAdapter(data: List<com.example.model.DataModel>) {
+    override fun setDataToAdapter(data: List<DataModel>) {
         adapter.setData(data)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_history -> {
-                startActivity(Intent(this, com.example.history.HistoryActivity::class.java))
-//                val intent1 = Intent().setClassName(packageName, HISTORY_SEARCH_ACTIVITY_PATH)
-//                startActivity(intent1)
+                val intent1 = Intent().setClassName(packageName, HISTORY_SEARCH_ACTIVITY_PATH)
+                startActivity(intent1)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -126,6 +142,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
 //                        startActivity(intent)
 //                    }
 //                    .addOnFailureListener {
+//                        Log.e("", "*** ${it.message}")
 //                        Toast.makeText(
 //                            applicationContext,
 //                            "Couldn't download feature: " + it.message,

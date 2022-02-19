@@ -4,6 +4,7 @@ package com.example.history
 import android.os.Bundle
 import android.view.View
 import com.example.core.viewmodel.BaseActivity
+import com.example.dictionarynew.injectDependenciesHistory
 import com.example.model.AppState
 import com.example.model.DataModel
 import kotlinx.android.synthetic.main.activity_history.*
@@ -35,7 +36,7 @@ class HistoryActivity : BaseActivity<AppState, HistoryInteractor>() {
         if (history_activity_recyclerview.adapter != null) {
             throw IllegalStateException("The ViewModel should be initialised first")
         }
-//        injectDependenciesHistory()
+        injectDependenciesHistory()
         val vm: HistoryViewModel by currentScope.inject()
 //        val viewModel: com.example.history.HistoryViewModel by viewModel()
 //        model = viewModel

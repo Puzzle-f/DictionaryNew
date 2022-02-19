@@ -2,6 +2,7 @@ package com.example.dictionarynew.view
 
 import com.example.model.*
 
+
 fun parseOnlineSearchResults(state: AppState): AppState {
     return AppState.Success(mapResult(state, true))
 }
@@ -39,10 +40,10 @@ private fun getSuccessResultData(
 }
 
 private fun parseOnlineResult(dataModel: DataModel, newDataModels: ArrayList<DataModel>) {
-    if (dataModel.text!!.isNotBlank() && !dataModel.meanings.isNullOrEmpty()) {
+    if (dataModel.text.isNotBlank() && !dataModel.meanings.isNullOrEmpty()) {
         val newMeanings = arrayListOf<Meanings>()
         for (meaning in dataModel.meanings) {
-            if (meaning.translation?.translation!!.isNotBlank()) {
+            if (meaning.translation.translation.isNotBlank()) {
                 newMeanings.add(Meanings(meaning.translation, meaning.imageUrl))
             }
         }
@@ -56,25 +57,25 @@ fun convertMeaningsToString(meanings: List<Meanings>): String {
     var meaningsSeparatedByComma = String()
     for ((index, meaning) in meanings.withIndex()) {
         meaningsSeparatedByComma += if (index + 1 != meanings.size) {
-            String.format("%s%s", meaning.translation?.translation, ", ")
+            String.format("%s%s", meaning.translation.translation, ", ")
         } else {
-            meaning.translation?.translation
+            meaning.translation.translation
         }
     }
     return meaningsSeparatedByComma
 }
 
-fun mapSearchResultToResult(searchResults: List<DataModelDto>): List<DataModel> {
-    return searchResults.map { searchResult ->
-        var meanings: List<Meanings> = listOf()
-        searchResult.meanings?.let {
-            meanings = it.map { meaningsDto ->
-                Meanings(
-                    Translation(meaningsDto?.translation?.translation ?: ""),
-                    meaningsDto?.imageUrl ?: ""
-                )
-            }
-        }
-        DataModel(searchResult.text ?: "", meanings)
-    }
-}
+//fun mapSearchResultToResult(searchResults: List<DataModelDto>): List<DataModel> {
+//    return searchResults.map { searchResult ->
+//        var meanings: List<Meanings> = listOf()
+//        searchResult.meanings?.let {
+//            meanings = it.map { meaningsDto ->
+//                Meanings(
+//                    Translation(meaningsDto.translation?.translation ?: ""),
+//                    meaningsDto.imageUrl ?: ""
+//                )
+//            }
+//        }
+//        DataModel(searchResult.text ?: "", meanings)
+//    }
+//}

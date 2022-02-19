@@ -2,4 +2,6 @@ package com.example.model
 
 import com.google.gson.annotations.SerializedName
 
-class Translation(@field:SerializedName("text") val translation: String?)
+class TranslationDto(@field:SerializedName("text") val translation: String?)
+
+data class Translation(val translation: String = "")

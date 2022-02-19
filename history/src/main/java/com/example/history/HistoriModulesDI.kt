@@ -1,6 +1,9 @@
 package com.example.dictionarynew
 
 import android.util.Log
+import com.example.history.HistoryActivity
+import com.example.history.HistoryInteractor
+import com.example.history.HistoryViewModel
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.loadKoinModules
 import org.koin.core.qualifier.named
@@ -10,17 +13,16 @@ fun injectDependenciesHistory() = loadModulesHistory
 
 private val loadModulesHistory by lazy {
     loadKoinModules(listOf(historyScreen))
-    Log.d("", " Инициилизируоем модуль Koin History")
 }
 
 val historyScreen = module {
-    scope(named<com.example.history.HistoryActivity>()) {
+    scope(named<HistoryActivity>()) {
         scoped {
-            com.example.history.HistoryInteractor(
+            HistoryInteractor(
                 repositoryRemote = get(),
                 repositoryLocal = get()
             )
         }
-        viewModel { com.example.history.HistoryViewModel(get()) }
+        viewModel { HistoryViewModel(get()) }
     }
 }

@@ -1,29 +1,32 @@
 package com.example.dictionarynew.interactor
 
 import com.example.core.viewmodel.IInteractor
-import com.example.dictionarynew.view.mapSearchResultToResult
+import com.example.history.mapSearchResultToResult
 import com.example.model.AppState
+import com.example.model.DataModelDto
+import com.example.repository.IRepositoryLocal
+import com.example.repository.Repository
 
 
 class MainInteractor(
-    private val repositoryRemote: com.example.repository.Repository<List<com.example.model.DataModelDto>>,
-    private val repositoryLocal: com.example.repository.IRepositoryLocal<List<com.example.model.DataModelDto>>
+    private val repositoryRemote: Repository<List<DataModelDto>>,
+    private val repositoryLocal: IRepositoryLocal<List<DataModelDto>>
 ) : IInteractor<AppState> {
 
     override suspend fun getData(
         word: String,
         fromRemoteSource: Boolean
-    ): com.example.model.AppState {
-        val appState: com.example.model.AppState
+    ): AppState {
+        val appState: AppState
         if (fromRemoteSource) {
-            appState = com.example.model.AppState.Success(
+            appState = AppState.Success(
                 mapSearchResultToResult(
                     repositoryRemote.getData(word)
                 )
             )
             repositoryLocal.saveToDB(appState)
         } else {
-            appState = com.example.model.AppState.Success(
+            appState = AppState.Success(
                 mapSearchResultToResult(
                     repositoryLocal.getData(word)
                 )

@@ -1,7 +1,6 @@
 package com.example.history
 
-import com.example.model.AppState
-import com.example.model.DataModel
+import com.example.model.*
 import java.util.*
 
 //fun mapSearchResultToResult(searchResults: List<DataModelDto>): List<DataModel> {
@@ -51,12 +50,7 @@ private fun getSuccessResultData(
             }
         } else {
             for (searchResult in dataModels) {
-                newDataModels.add(
-                    DataModel(
-                        searchResult.text,
-                        arrayListOf()
-                    )
-                )
+                newDataModels.add(DataModel(searchResult.text, arrayListOf()))
             }
         }
     }
@@ -67,11 +61,11 @@ private fun parseOnlineResult(
     newDataModels: ArrayList<DataModel>
 ) {
     if (dataModel.text.isNotBlank() && !dataModel.meanings.isNullOrEmpty()) {
-        val newMeanings = arrayListOf<com.example.model.Meanings>()
+        val newMeanings = arrayListOf<Meanings>()
         for (meaning in dataModel.meanings) {
-            if (meaning.translation?.translation!!.isNotBlank()) {
+            if (meaning.translation.translation.isNotBlank()) {
                 newMeanings.add(
-                    com.example.model.Meanings(
+                    Meanings(
                         meaning.translation,
                         meaning.imageUrl
                     )
@@ -81,5 +75,20 @@ private fun parseOnlineResult(
         if (newMeanings.isNotEmpty()) {
             newDataModels.add(DataModel(dataModel.text, newMeanings))
         }
+    }
+}
+
+fun mapSearchResultToResult(searchResults: List<DataModelDto>): List<DataModel> {
+    return searchResults.map { searchResult ->
+        var meanings: List<Meanings> = listOf()
+        searchResult.meanings?.let {
+            meanings = it.map { meaningsDto ->
+                Meanings(
+                    Translation(meaningsDto.translation?.translation ?: ""),
+                    meaningsDto.imageUrl ?: ""
+                )
+            }
+        }
+        DataModel(searchResult.text ?: "", meanings)
     }
 }
