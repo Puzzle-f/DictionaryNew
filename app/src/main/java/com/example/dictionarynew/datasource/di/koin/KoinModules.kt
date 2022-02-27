@@ -1,9 +1,11 @@
 package com.example.dictionarynew.datasource.di.koin
 
+import android.util.Log
 import androidx.room.Room
 import com.example.dictionarynew.MainActivity
 import com.example.dictionarynew.interactor.MainInteractor
 import com.example.dictionarynew.view.MainViewModel
+import com.example.history.HistoryActivity
 import com.example.model.DataModelDto
 import com.example.repository.*
 import org.koin.android.viewmodel.dsl.viewModel
@@ -17,29 +19,42 @@ private val loadModules by lazy {
     loadKoinModules(listOf(application, mainScreen))
 }
 
+
+
 val application = module {
-    // создаём БД
-    single {
-        Room.databaseBuilder(get(), com.example.repository.HistoryDataBase::class.java, "HistoryDB")
+
+        single {
+            Room.databaseBuilder(get(), HistoryDataBase::class.java, "HistoryDB")
 //        .addMigrations()  можно добавить миграцию
 //        .fallbackToDestructiveMigration() удаляет старую версию и устанавливает БД заново. Можно исп. вместо миграции
-            .build()
-    }
-    // Получаем DAO
+                .build()
+        }
+
+//    scope(named<MainActivity>()){
+//        scoped {
+//            Log.d("создание bd", "HistoryDataBase - 1")
+//            Room.databaseBuilder(get(), HistoryDataBase::class.java, "HistoryDB").build()
+//        }
+//    }
+
     single { get<HistoryDataBase>().historyDao() }
 
+        // создаём БД
+        // Получаем DAO
+
     single<Repository<List<DataModelDto>>> {
-        RepositoryImplementation(
-            RetrofitImplementation()
-        )
-    }
-    single<IRepositoryLocal<List<DataModelDto>>> {
-        RepositoryImplementationLocal(
-            RoomDataBaseImplementation(
-                get()
+            RepositoryImplementation(
+                RetrofitImplementation()
             )
-        )
-    }
+        }
+
+    single<IRepositoryLocal<List<DataModelDto>>> {
+            RepositoryImplementationLocal(
+                RoomDataBaseImplementation(
+                    get()
+                )
+            )
+        }
 }
 
 //val mainScreen = module {

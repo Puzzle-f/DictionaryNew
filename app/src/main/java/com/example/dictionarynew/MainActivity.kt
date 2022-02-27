@@ -26,7 +26,9 @@ import com.google.android.play.core.splitinstall.SplitInstallRequest
 import geekbrains.ru.utils.network.isOnline
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.loading_layout.*
+import org.koin.android.ext.android.getKoin
 import org.koin.android.scope.currentScope
+import org.koin.core.qualifier.named
 
 private const val HISTORY_SEARCH_ACTIVITY_PATH =
     "com.example.history.HistoryActivity"
@@ -38,6 +40,8 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     private lateinit var splitInstallManager: SplitInstallManager
 private val mainActivityRecyclerview by viewById<RecyclerView>(R.id.main_activity_recyclerview)
 
+//    val myScopeInstance = getKoin().createScope("myScopeId", named("opopopo"))
+
     private val adapter: MainAdapter by lazy { MainAdapter(onListItemClickListener) }
     private val searchFabClickListener: View.OnClickListener =
         View.OnClickListener {
@@ -45,6 +49,15 @@ private val mainActivityRecyclerview by viewById<RecyclerView>(R.id.main_activit
             searchDialogFragment.setOnSearchClickListener(onSearchClickListener)
             searchDialogFragment.show(supportFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
         }
+
+    private fun initViews() {
+        mainActivityRecyclerview.adapter = adapter
+        mainActivityRecyclerview.layoutManager = LinearLayoutManager(applicationContext)
+//        main_activity_recyclerview.adapter = adapter
+        search_fab.setOnClickListener(searchFabClickListener)
+//        main_activity_recyclerview.layoutManager = LinearLayoutManager(applicationContext)
+
+    }
 
     // Слушатель получает от адаптера необходимые данные и запускает новый экран
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
@@ -81,29 +94,12 @@ private val mainActivityRecyclerview by viewById<RecyclerView>(R.id.main_activit
         initViews()
     }
 
-//    private fun iniViewModel() {
-//        if (main_activity_recyclerview.adapter != null) {
-//            throw IllegalStateException("The ViewModel should be initialised first")
-//        }
-//        val viewModel: MainViewModel by viewModel()
-//        model = viewModel
-//        model.subscribe()
-//            .observe(this@MainActivity, Observer<com.example.model.AppState> { renderData(it) })
-//    }
-
     private fun iniViewModel() {
         check(main_activity_recyclerview.adapter == null) { "The mainViewModel should be initialised first" }
         injectDependencies()
         val mainViewModel: MainViewModel by currentScope.inject()
         model = mainViewModel
         model.subscribe().observe(this@MainActivity, { renderData(it) })
-    }
-
-    private fun initViews() {
-        main_activity_recyclerview.adapter = adapter
-        search_fab.setOnClickListener(searchFabClickListener)
-        main_activity_recyclerview.layoutManager = LinearLayoutManager(applicationContext)
-
     }
 
     companion object {
@@ -126,6 +122,7 @@ private val mainActivityRecyclerview by viewById<RecyclerView>(R.id.main_activit
         }
     }
 
+//    динамическая фича
 //    override fun onOptionsItemSelected(item: MenuItem): Boolean {
 //        return when (item.itemId) {
 //            R.id.menu_history -> {
